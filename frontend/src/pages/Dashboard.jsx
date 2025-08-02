@@ -1,5 +1,3 @@
-// src/pages/Dashboard.jsx
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios";
@@ -33,7 +31,9 @@ const Dashboard = () => {
     fetchSessions();
   }, []);
 
-  const publishedCount = mySessions.filter((s) => s.status === "published").length;
+  const publishedCount = mySessions.filter(
+    (s) => s.status === "published"
+  ).length;
   const draftCount = mySessions.filter((s) => s.status === "draft").length;
 
   const formatDate = (dateString) =>
@@ -43,8 +43,14 @@ const Dashboard = () => {
     <main className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-cyan-800 font-montserrat select-none text-white">
       <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
         <div className="absolute top-24 left-24 w-36 h-36 rounded-full bg-emerald-500/10 animate-pulse"></div>
-        <div className="absolute bottom-40 right-32 w-28 h-28 rounded-full bg-emerald-400/20 animate-bounce" style={{ animationDuration: "3.5s" }}></div>
-        <div className="absolute top-1/2 left-12 w-20 h-20 rounded-full bg-emerald-600/20 animate-ping" style={{ animationDuration: "5s" }}></div>
+        <div
+          className="absolute bottom-40 right-32 w-28 h-28 rounded-full bg-emerald-400/20 animate-bounce"
+          style={{ animationDuration: "3.5s" }}
+        ></div>
+        <div
+          className="absolute top-1/2 left-12 w-20 h-20 rounded-full bg-emerald-600/20 animate-ping"
+          style={{ animationDuration: "5s" }}
+        ></div>
         <div className="absolute bottom-20 right-16 w-20 h-20 rounded-full bg-cyan-500/15 animate-pulse"></div>
         <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-gradient-to-r from-emerald-400/30 to-transparent blur-3xl"></div>
         <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-gradient-to-l from-cyan-400/30 to-transparent blur-3xl"></div>
@@ -58,7 +64,8 @@ const Dashboard = () => {
                 Welcome, <span className="text-emerald-400">Yogi</span>!
               </h1>
               <p className="mt-2 text-lg text-emerald-200/80 max-w-md">
-                Your personal hub for creating, editing, and tracking wellness sessions. Let's elevate your journey.
+                Your personal hub for creating, editing, and tracking wellness
+                sessions. Let's elevate your journey.
               </p>
             </div>
 
@@ -71,11 +78,15 @@ const Dashboard = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-white/20 flex flex-col items-center">
-              <p className="text-6xl font-bold text-emerald-400">{mySessions.length}</p>
+              <p className="text-6xl font-bold text-emerald-400">
+                {mySessions.length}
+              </p>
               <p className="text-xl font-semibold mt-2">Total Sessions</p>
             </div>
             <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-white/20 flex flex-col items-center">
-              <p className="text-6xl font-bold text-emerald-500">{publishedCount}</p>
+              <p className="text-6xl font-bold text-emerald-500">
+                {publishedCount}
+              </p>
               <p className="text-xl font-semibold mt-2">Published Sessions</p>
             </div>
             <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-white/20 flex flex-col items-center">
@@ -151,7 +162,9 @@ const Dashboard = () => {
           </div>
 
           <section>
-            <h2 className="text-4xl font-extrabold mb-8 drop-shadow-md tracking-wide">Recent Sessions</h2>
+            <h2 className="text-4xl font-extrabold mb-8 drop-shadow-md tracking-wide">
+              Recent Sessions
+            </h2>
             {loading ? (
               <div className="flex flex-col items-center space-y-6 py-20 text-emerald-200 animate-pulse">
                 <svg
@@ -161,14 +174,22 @@ const Dashboard = () => {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <ellipse cx="70" cy="110" rx="47" ry="10" fill="#2ecc71" />
-                  <rect x="35" y="35" width="70" height="50" rx="12" fill="#27ae60" />
+                  <rect
+                    x="35"
+                    y="35"
+                    width="70"
+                    height="50"
+                    rx="12"
+                    fill="#27ae60"
+                  />
                 </svg>
                 <p className="text-xl">Loading your sessions...</p>
               </div>
             ) : mySessions.length === 0 ? (
               <div className="text-center py-20 text-white">
                 <p className="text-xl max-w-xl mx-auto">
-                  You haven't created any sessions yet. Click "New Session" to start your wellness journey.
+                  You haven't created any sessions yet. Click "New Session" to
+                  start your wellness journey.
                 </p>
               </div>
             ) : (

@@ -2,13 +2,10 @@ import { generateToken } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
-/**
- * Register a new user
- */
 export const register = async (req, res) => {
-  const { email, password, firstName = "", lastName = "" } = req.body; // <-- accept names here
+  const { email, password, firstName = "", lastName = "" } = req.body;
   try {
-    if (!email || !password || !firstName) // require first name for best UX
+    if (!email || !password || !firstName)
       return res.status(400).json({ message: "Fill in all the fields" });
 
     if (password.length < 6) {
@@ -23,22 +20,21 @@ export const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // --- Add first and last name here ---
     const newUser = new User({
       email,
       password: hashedPassword,
-      firstName, // NEW: stores the first name
-      lastName,  // NEW: stores the last name (optionally blank)
+      firstName,
+      lastName,
     });
 
     if (newUser) {
       await newUser.save();
-      generateToken(newUser._id, res); // Set JWT in HTTP-only cookie
+      generateToken(newUser._id, res);
 
       res.status(200).json({
         _id: newUser._id,
         email: newUser.email,
-        firstName: newUser.firstName, // <-- return for frontend
+        firstName: newUser.firstName,
         lastName: newUser.lastName,
       });
     } else {
@@ -50,9 +46,6 @@ export const register = async (req, res) => {
   }
 };
 
-/**
- * User login
- */
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -66,12 +59,12 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    generateToken(user._id, res); // Set JWT in HTTP-only cookie
+    generateToken(user._id, res);
 
     res.status(200).json({
       _id: user._id,
       email: user.email,
-      firstName: user.firstName, // <-- return for frontend
+      firstName: user.firstName,
       lastName: user.lastName,
     });
   } catch (error) {
@@ -80,12 +73,14 @@ export const login = async (req, res) => {
   }
 };
 
-/**
- * User logout - clears JWT cookie
- */
 export const logout = (req, res) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0, httpOnly: true, sameSite: "strict", secure: process.env.NODE_ENV !== "development" });
+    res.cookie("jwt", "", {
+      maxAge: 0,
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV !== "development",
+    });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.log("Error in logout controller", error.message);
@@ -93,21 +88,18 @@ export const logout = (req, res) => {
   }
 };
 
-/**
- * Check if user is authenticated (used for ProtectedRoute on frontend)
- */
 export const checkAuth = async (req, res) => {
   try {
     if (!req.user) {
       return res.status(401).json({ message: "Not authorized" });
     }
-    // Optionally return minimal user info to frontend
+
     res.status(200).json({
       message: "Authorized",
       user: {
         _id: req.user._id,
         email: req.user.email,
-        firstName: req.user.firstName, // <-- always add these
+        firstName: req.user.firstName,
         lastName: req.user.lastName,
       },
     });

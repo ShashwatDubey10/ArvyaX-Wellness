@@ -1,11 +1,10 @@
-// src/pages/SessionEditor.jsx
-
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 
-const isValidObjectId = (id) => typeof id === "string" && /^[0-9a-fA-F]{24}$/.test(id);
+const isValidObjectId = (id) =>
+  typeof id === "string" && /^[0-9a-fA-F]{24}$/.test(id);
 
 const SessionEditor = () => {
   const { id } = useParams();
@@ -19,11 +18,9 @@ const SessionEditor = () => {
   const [publishing, setPublishing] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
 
-  // For debounce management and preventing unnecessary saves
   const lastSavedFormRef = useRef({ title: "", tags: "", json_file_url: "" });
   const debounceTimer = useRef(null);
 
-  // Fetch session if editing an existing one
   useEffect(() => {
     if (isNew) {
       setLoading(false);
@@ -31,7 +28,8 @@ const SessionEditor = () => {
       return;
     }
     if (isEdit) {
-      api.get(`/my-sessions/${id}`)
+      api
+        .get(`/my-sessions/${id}`)
         .then((res) => {
           const data = res.data.session || {};
           const loadedForm = {
@@ -50,7 +48,6 @@ const SessionEditor = () => {
     }
   }, [id, isNew, isEdit]);
 
-  // ✅ FIXED: Debounced auto-save handler
   useEffect(() => {
     if (loading || saving || publishing) return;
 
@@ -67,7 +64,10 @@ const SessionEditor = () => {
       setSaving(true);
       const payload = {
         ...form,
-        tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
+        tags: form.tags
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean),
       };
       try {
         let res;
@@ -94,14 +94,16 @@ const SessionEditor = () => {
     return () => clearTimeout(debounceTimer.current);
   }, [form, loading, saving, publishing, isNew, id, navigate]);
 
-  // Manual save (button click)
   const handleSaveDraft = async (e) => {
     e.preventDefault();
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
     setSaving(true);
     const payload = {
       ...form,
-      tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
+      tags: form.tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
     };
     try {
       let res;
@@ -122,7 +124,6 @@ const SessionEditor = () => {
     }
   };
 
-  // Publish session
   const handlePublish = async () => {
     if (isNew) return;
     setPublishing(true);
@@ -130,7 +131,10 @@ const SessionEditor = () => {
       await api.post("/my-sessions/publish", {
         id,
         title: form.title,
-        tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
+        tags: form.tags
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean),
         json_file_url: form.json_file_url,
       });
       toast.success("Session published!");
@@ -149,7 +153,6 @@ const SessionEditor = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-cyan-800 font-montserrat select-none relative flex items-center justify-center px-4 py-12">
-      {/* Background floating orbs */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute top-20 left-36 w-40 h-40 rounded-full bg-emerald-500/10 animate-pulse" />
         <div
@@ -166,38 +169,43 @@ const SessionEditor = () => {
         <div className="absolute top-1/2 -left-48 w-80 h-80 rounded-full bg-gradient-to-r from-emerald-300/10 to-transparent blur-2xl" />
       </div>
 
-      {/* Status indicator */}
       {saving && (
         <div className="fixed top-4 right-4 bg-emerald-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg shadow-lg z-50 border border-emerald-400/30">
           💾 Saving...
         </div>
       )}
 
-      {/* ✅ PERFECT: Glassmorphic card with ideal styling */}
       <form
         onSubmit={handleSaveDraft}
         noValidate
         className="relative z-10 w-full max-w-lg backdrop-blur-xl bg-white/10 border border-white/30 rounded-3xl shadow-2xl p-10"
         style={{
-          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08))",
+          background:
+            "linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08))",
           boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
         }}
       >
-        {/* ✅ IMPROVED: Better gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/8 via-transparent to-cyan-400/8 rounded-3xl" />
-        
+
         <div className="relative z-10">
           <h1 className="text-3xl font-extrabold text-white mb-8 tracking-tight drop-shadow-lg">
-            {isNew ? "Create New Session" : isEdit ? "Edit Session" : "Invalid Session"}
+            {isNew
+              ? "Create New Session"
+              : isEdit
+              ? "Edit Session"
+              : "Invalid Session"}
           </h1>
 
           {loading ? (
-            <div className="text-center py-20 text-emerald-200 animate-pulse">Loading...</div>
+            <div className="text-center py-20 text-emerald-200 animate-pulse">
+              Loading...
+            </div>
           ) : !isEdit && !isNew ? (
-            <div className="text-center py-20 text-red-400 font-bold">Invalid session ID.</div>
+            <div className="text-center py-20 text-red-400 font-bold">
+              Invalid session ID.
+            </div>
           ) : (
             <>
-              {/* ✅ PERFECT COMBO: Floating labels + bigger input boxes */}
               <div className="relative mb-8">
                 <input
                   id="title"
@@ -209,7 +217,10 @@ const SessionEditor = () => {
                   onBlur={() => setFocusedField(null)}
                   className="w-full px-5 py-4 rounded-2xl border-2 bg-transparent text-white placeholder-transparent focus:outline-none transition-all duration-200"
                   style={{
-                    borderColor: focusedField === "title" || form.title ? "#10b981" : "rgba(255, 255, 255, 0.3)",
+                    borderColor:
+                      focusedField === "title" || form.title
+                        ? "#10b981"
+                        : "rgba(255, 255, 255, 0.3)",
                     backgroundColor: "rgba(255, 255, 255, 0.05)",
                   }}
                   placeholder="Title"
@@ -240,7 +251,10 @@ const SessionEditor = () => {
                   onBlur={() => setFocusedField(null)}
                   className="w-full px-5 py-4 rounded-2xl border-2 bg-transparent text-white placeholder-transparent focus:outline-none transition-all duration-200"
                   style={{
-                    borderColor: focusedField === "tags" || form.tags ? "#10b981" : "rgba(255, 255, 255, 0.3)",
+                    borderColor:
+                      focusedField === "tags" || form.tags
+                        ? "#10b981"
+                        : "rgba(255, 255, 255, 0.3)",
                     backgroundColor: "rgba(255, 255, 255, 0.05)",
                   }}
                   placeholder="Tags"
@@ -269,7 +283,10 @@ const SessionEditor = () => {
                   onBlur={() => setFocusedField(null)}
                   className="w-full px-5 py-4 rounded-2xl border-2 bg-transparent text-white placeholder-transparent focus:outline-none transition-all duration-200"
                   style={{
-                    borderColor: focusedField === "json_file_url" || form.json_file_url ? "#10b981" : "rgba(255, 255, 255, 0.3)",
+                    borderColor:
+                      focusedField === "json_file_url" || form.json_file_url
+                        ? "#10b981"
+                        : "rgba(255, 255, 255, 0.3)",
                     backgroundColor: "rgba(255, 255, 255, 0.05)",
                   }}
                   placeholder="JSON File URL"
@@ -287,7 +304,6 @@ const SessionEditor = () => {
                 </label>
               </div>
 
-              {/* ✅ IMPROVED: Enhanced button styling */}
               <div className="flex gap-6">
                 <button
                   type="submit"

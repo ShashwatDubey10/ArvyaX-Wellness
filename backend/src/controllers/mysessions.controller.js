@@ -1,10 +1,5 @@
-// backend/src/controllers/mysessions.controller.js
 import Session from "../models/session.model.js";
 
-/**
- * GET /api/my-sessions
- * Fetch all sessions (draft & published) for the logged-in user.
- */
 export const getMySessions = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -18,16 +13,11 @@ export const getMySessions = async (req, res) => {
   }
 };
 
-/**
- * GET /api/my-sessions/:id
- * Fetch a single session by ID (must belong to the user).
- */
 export const getSessionById = async (req, res) => {
   try {
     const userId = req.user._id;
     const { id } = req.params;
 
-    // Defensive: block undefined, "new", or wrong length
     if (!id || id === "undefined" || id === "new" || id.length !== 24) {
       return res.status(400).json({ message: "Invalid session ID" });
     }
@@ -48,16 +38,19 @@ export const deleteSession = async (req, res) => {
     const userId = req.user._id;
     const { id } = req.params;
 
-    // Defensive check for valid ID
     if (!id || id === "undefined" || id === "new" || id.length !== 24) {
       return res.status(400).json({ message: "Invalid session ID" });
     }
 
-    // Attempt to delete session owned by user
-    const deleted = await Session.findOneAndDelete({ _id: id, user_id: userId });
+    const deleted = await Session.findOneAndDelete({
+      _id: id,
+      user_id: userId,
+    });
 
     if (!deleted) {
-      return res.status(404).json({ message: "Session not found or not authorized" });
+      return res
+        .status(404)
+        .json({ message: "Session not found or not authorized" });
     }
 
     res.status(200).json({ message: "Session deleted successfully" });
@@ -66,10 +59,7 @@ export const deleteSession = async (req, res) => {
     res.status(500).json({ message: "Server error deleting session" });
   }
 };
-/**
- * POST /api/my-sessions/save-draft
- * Create or update a draft session.
- */
+
 export const saveDraftSession = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -77,7 +67,6 @@ export const saveDraftSession = async (req, res) => {
 
     let session;
     if (id) {
-      // Update existing draft
       session = await Session.findOneAndUpdate(
         { _id: id, user_id: userId },
         { title, tags, json_file_url, status: "draft" },
@@ -87,7 +76,6 @@ export const saveDraftSession = async (req, res) => {
         return res.status(404).json({ message: "Session not found" });
       }
     } else {
-      // Create new draft
       session = new Session({
         user_id: userId,
         title,
@@ -105,16 +93,11 @@ export const saveDraftSession = async (req, res) => {
   }
 };
 
-/**
- * POST /api/my-sessions/publish
- * Publish an existing draft session.
- */
 export const publishSession = async (req, res) => {
   try {
     const userId = req.user._id;
     const { id, title, tags, json_file_url } = req.body;
 
-    // Cannot publish if ID missing or invalid
     if (!id || id === "undefined" || id === "new" || id.length !== 24) {
       return res.status(400).json({ message: "Invalid session ID" });
     }

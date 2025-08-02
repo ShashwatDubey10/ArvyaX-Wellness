@@ -1,5 +1,3 @@
-// src/pages/Register.jsx
-
 import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -52,7 +50,6 @@ const Register = () => {
       );
       navigate("/dashboard");
     } catch (err) {
-      // Console error logging for debugging registration problems
       console.error("Registration error:", err.response?.data || err);
       toast.error(err.response?.data?.message || "Registration failed", {
         style: {
@@ -65,14 +62,12 @@ const Register = () => {
     }
   };
 
-  // Autofocus for first name field using React ref, for better maintainability
   useEffect(() => {
     if (firstNameRef.current) firstNameRef.current.focus();
   }, []);
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-900 via-emerald-900 to-slate-800 flex items-center justify-center p-4 font-montserrat">
-      {/* Background animations */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-emerald-500/10 rounded-full animate-pulse"></div>
         <div
@@ -91,14 +86,10 @@ const Register = () => {
         <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-gradient-to-l from-emerald-600/20 to-transparent rounded-full blur-3xl animate-pulse"></div>
       </div>
 
-      {/* Form container */}
       <div className="relative z-10 w-full max-w-md">
-        {/* Glassmorphic card */}
         <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl shadow-2xl p-8 relative overflow-hidden">
-          {/* Card glow */}
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/5 to-emerald-600/5 rounded-3xl"></div>
 
-          {/* Header */}
           <div className="relative z-10 text-center mb-8">
             <Link
               to="/"
@@ -114,13 +105,11 @@ const Register = () => {
             </p>
           </div>
 
-          {/* Form */}
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-6 relative z-10"
             noValidate
           >
-            {/* First Name */}
             <div className="relative">
               <input
                 id="firstName"
@@ -158,7 +147,6 @@ const Register = () => {
               )}
             </div>
 
-            {/* Last Name */}
             <div className="relative">
               <input
                 id="lastName"
@@ -193,7 +181,6 @@ const Register = () => {
               )}
             </div>
 
-            {/* Email */}
             <div className="relative">
               <input
                 id="email"
@@ -234,7 +221,6 @@ const Register = () => {
               )}
             </div>
 
-            {/* Password */}
             <div className="relative">
               <input
                 id="password"
@@ -315,7 +301,6 @@ const Register = () => {
               )}
             </div>
 
-            {/* Confirm Password */}
             <div className="relative">
               <input
                 id="confirmPassword"
@@ -349,7 +334,9 @@ const Register = () => {
               <button
                 type="button"
                 className="absolute right-4 top-4 p-1 text-emerald-200/70 hover:text-emerald-400 transition-colors duration-200"
-                aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                aria-label={
+                  showConfirmPassword ? "Hide password" : "Show password"
+                }
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 tabIndex={-1}
               >
@@ -396,7 +383,6 @@ const Register = () => {
               )}
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={isSubmitting || isLoading}
@@ -435,7 +421,6 @@ const Register = () => {
             </button>
           </form>
 
-          {/* Footer */}
           <div className="mt-8 text-center relative z-10">
             <p className="text-emerald-200/70 text-sm">
               Already have an account?{" "}
@@ -449,11 +434,9 @@ const Register = () => {
           </div>
         </div>
 
-        {/* Bottom Glow */}
         <div className="absolute bottom-[-32px] left-1/2 transform -translate-x-1/2 w-3/4 h-8 bg-gradient-to-r from-emerald-500/30 to-transparent rounded-full blur-3xl"></div>
       </div>
 
-      {/* Keyframe and animation CSS */}
       <style jsx>{`
         @keyframes shake {
           0%,

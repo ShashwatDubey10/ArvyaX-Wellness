@@ -4,7 +4,7 @@ import {
   getSessionById,
   saveDraftSession,
   publishSession,
-  deleteSession, // <-- Import the new function
+  deleteSession, 
 } from "../controllers/mysessions.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 
@@ -16,6 +16,6 @@ router.get("/", getMySessions);
 router.get("/:id", getSessionById);
 router.post("/save-draft", saveDraftSession);
 router.post("/publish", publishSession);
-router.delete("/:id", deleteSession); // <-- New DELETE route
+router.delete("/:id", deleteSession); 
 
 export default router;

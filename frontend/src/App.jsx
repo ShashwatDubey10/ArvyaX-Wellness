@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -38,12 +37,10 @@ export default function App() {
       <Toaster position="top-right" />
       <Header />
       <Routes>
-        {/* Public routes */}
         <Route path="/sessions" element={<Sessions />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected routes */}
         <Route
           path="/dashboard"
           element={
@@ -60,7 +57,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        {/* IMPORTANT: Place /new ABOVE /:id or it will never match */}
+
         <Route
           path="/my-sessions/new"
           element={
@@ -78,10 +75,8 @@ export default function App() {
           }
         />
 
-        {/* Redirect root to /sessions */}
         <Route path="/" element={<Navigate to="/sessions" replace />} />
 
-        {/* 404 fallback route */}
         <Route
           path="*"
           element={<div className="p-10 text-center">404 - Page not found</div>}

@@ -4,9 +4,7 @@
 @plugin "daisyui";
 
 
-/* src/index.css */
 
-/* Global font */
 :root {
   --font-sans: 'Montserrat', sans-serif;
 }

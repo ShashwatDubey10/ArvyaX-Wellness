@@ -1,5 +1,3 @@
-// src/components/Header.jsx
-
 import React, { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import api from "../api/axios";
@@ -19,7 +17,6 @@ const Header = () => {
         setIsLoggedIn(true);
         setUser(res.data.user || null);
       } catch (err) {
-        // Optional: log error to console for debugging
         console.error("Auth check failed:", err);
         setIsLoggedIn(false);
         setUser(null);
@@ -41,7 +38,6 @@ const Header = () => {
     }
   };
 
-  // Memoize initials generation
   const getUserInitials = useCallback(() => {
     if (!user) return "";
     const firstInitial = user.firstName ? user.firstName.charAt(0) : "";
@@ -55,7 +51,10 @@ const Header = () => {
   if (checkingAuth) {
     return (
       <header className="w-full flex items-center justify-between bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-6 md:px-12 py-4 shadow-lg text-white font-montserrat select-none sticky top-0 z-30">
-        <Link to="/" className="font-extrabold text-2xl tracking-widest text-emerald-400 drop-shadow-md">
+        <Link
+          to="/"
+          className="font-extrabold text-2xl tracking-widest text-emerald-400 drop-shadow-md"
+        >
           ARVYA.X
         </Link>
         <nav>
@@ -102,8 +101,12 @@ const Header = () => {
             <div className="flex items-center gap-4 ml-6">
               <div
                 className="relative w-11 h-11 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg shadow-lg border border-emerald-300 ring-1 ring-emerald-300 select-none"
-                aria-label={`User profile: ${user?.firstName || ""} ${user?.lastName || ""}`}
-                title={`${user?.firstName || ""} ${user?.lastName || ""}`.trim()}
+                aria-label={`User profile: ${user?.firstName || ""} ${
+                  user?.lastName || ""
+                }`}
+                title={`${user?.firstName || ""} ${
+                  user?.lastName || ""
+                }`.trim()}
               >
                 {getUserInitials() || "U"}
                 <span className="absolute inset-0 rounded-full ring-2 ring-emerald-400 opacity-0 hover:opacity-40 transition-opacity duration-350" />
@@ -124,21 +127,33 @@ const Header = () => {
         ) : (
           <>
             {showLoginLink && (
-              <Link to="/login" className="py-2 px-4 rounded-md hover:text-emerald-400 transition-colors">
+              <Link
+                to="/login"
+                className="py-2 px-4 rounded-md hover:text-emerald-400 transition-colors"
+              >
                 Login
               </Link>
             )}
             {showRegisterLink && (
-              <Link to="/register" className="py-2 px-4 rounded-md hover:text-emerald-400 transition-colors">
+              <Link
+                to="/register"
+                className="py-2 px-4 rounded-md hover:text-emerald-400 transition-colors"
+              >
                 Register
               </Link>
             )}
             {!showLoginLink && !showRegisterLink && (
               <>
-                <Link to="/login" className="py-2 px-4 rounded-md hover:text-emerald-400 transition-colors">
+                <Link
+                  to="/login"
+                  className="py-2 px-4 rounded-md hover:text-emerald-400 transition-colors"
+                >
                   Login
                 </Link>
-                <Link to="/register" className="py-2 px-4 rounded-md hover:text-emerald-400 transition-colors">
+                <Link
+                  to="/register"
+                  className="py-2 px-4 rounded-md hover:text-emerald-400 transition-colors"
+                >
                   Register
                 </Link>
               </>
