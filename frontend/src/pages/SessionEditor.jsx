@@ -89,7 +89,7 @@ const SessionEditor = () => {
       } finally {
         setSaving(false);
       }
-    }, 2000);
+    }, 5000);
 
     return () => clearTimeout(debounceTimer.current);
   }, [form, loading, saving, publishing, isNew, id, navigate]);
