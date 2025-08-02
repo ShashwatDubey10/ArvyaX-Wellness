@@ -1,6 +1,6 @@
 // src/pages/Register.jsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
@@ -12,6 +12,8 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
+
+  const firstNameRef = useRef(null);
 
   const {
     register: formRegister,
@@ -36,15 +38,22 @@ const Register = () => {
         firstName: data.firstName,
         lastName: data.lastName,
       });
-      toast.success("Welcome aboard, " + (data.firstName || "") + "! Ready to begin your wellness journey.", {
-        duration: 4000,
-        style: {
-          background: "#065f46",
-          color: "#ffffff",
-        },
-      });
+      toast.success(
+        "Welcome aboard, " +
+          (data.firstName || "") +
+          "! Ready to begin your wellness journey.",
+        {
+          duration: 4000,
+          style: {
+            background: "#065f46",
+            color: "#ffffff",
+          },
+        }
+      );
       navigate("/dashboard");
     } catch (err) {
+      // Console error logging for debugging registration problems
+      console.error("Registration error:", err.response?.data || err);
       toast.error(err.response?.data?.message || "Registration failed", {
         style: {
           background: "#dc2626",
@@ -56,10 +65,9 @@ const Register = () => {
     }
   };
 
-  // Auto-focus first name input on mount
+  // Autofocus for first name field using React ref, for better maintainability
   useEffect(() => {
-    const firstNameInput = document.getElementById("firstName");
-    if (firstNameInput) firstNameInput.focus();
+    if (firstNameRef.current) firstNameRef.current.focus();
   }, []);
 
   return (
@@ -67,9 +75,18 @@ const Register = () => {
       {/* Background animations */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-emerald-500/10 rounded-full animate-pulse"></div>
-        <div className="absolute top-3/4 right-1/4 w-24 h-24 bg-emerald-400/5 rounded-full animate-bounce" style={{ animationDuration: "3s" }}></div>
-        <div className="absolute top-1/2 left-1/6 w-16 h-16 bg-emerald-600/10 rounded-full animate-ping" style={{ animationDuration: "4s" }}></div>
-        <div className="absolute bottom-1/4 right-1/6 w-20 h-20 bg-emerald-300/8 rounded-full animate-pulse" style={{ animationDelay: "2s" }}></div>
+        <div
+          className="absolute top-3/4 right-1/4 w-24 h-24 bg-emerald-400/5 rounded-full animate-bounce"
+          style={{ animationDuration: "3s" }}
+        ></div>
+        <div
+          className="absolute top-1/2 left-1/6 w-16 h-16 bg-emerald-600/10 rounded-full animate-ping"
+          style={{ animationDuration: "4s" }}
+        ></div>
+        <div
+          className="absolute bottom-1/4 right-1/6 w-20 h-20 bg-emerald-300/8 rounded-full animate-pulse"
+          style={{ animationDelay: "2s" }}
+        ></div>
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-gradient-to-r from-emerald-400/20 to-transparent rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-gradient-to-l from-emerald-600/20 to-transparent rounded-full blur-3xl animate-pulse"></div>
       </div>
@@ -87,22 +104,29 @@ const Register = () => {
               to="/"
               className="inline-block font-extrabold text-3xl tracking-wider text-emerald-400 drop-shadow-lg hover:scale-105 transition-transform duration-300 mb-2"
             >
-              ARYVA.X
+              ARVYA.X
             </Link>
-            <h1 className="text-2xl font-bold text-white mb-2">Create your account</h1>
+            <h1 className="text-2xl font-bold text-white mb-2">
+              Create your account
+            </h1>
             <p className="text-emerald-200/80 text-sm">
-              Join the ARYVA community and start your wellness journey.
+              Join the ARVYA community and start your wellness journey.
             </p>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 relative z-10" noValidate>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-6 relative z-10"
+            noValidate
+          >
             {/* First Name */}
             <div className="relative">
               <input
                 id="firstName"
                 type="text"
                 autoComplete="given-name"
+                ref={firstNameRef}
                 className={`w-full px-4 py-4 bg-white/10 border rounded-2xl text-white placeholder-transparent focus:outline-none transition-all duration-300 ${
                   errors.firstName
                     ? "border-red-400 ring-2 ring-red-400"
@@ -128,7 +152,9 @@ const Register = () => {
                 First Name
               </label>
               {errors.firstName && (
-                <p className="text-red-400 text-xs mt-2 animate-shake">{errors.firstName.message}</p>
+                <p className="text-red-400 text-xs mt-2 animate-shake">
+                  {errors.firstName.message}
+                </p>
               )}
             </div>
 
@@ -161,7 +187,9 @@ const Register = () => {
                 Last Name (optional)
               </label>
               {errors.lastName && (
-                <p className="text-red-400 text-xs mt-2 animate-shake">{errors.lastName.message}</p>
+                <p className="text-red-400 text-xs mt-2 animate-shake">
+                  {errors.lastName.message}
+                </p>
               )}
             </div>
 
@@ -200,7 +228,9 @@ const Register = () => {
                 Email Address
               </label>
               {errors.email && (
-                <p className="text-red-400 text-xs mt-2 animate-shake">{errors.email.message}</p>
+                <p className="text-red-400 text-xs mt-2 animate-shake">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
@@ -279,7 +309,9 @@ const Register = () => {
                 )}
               </button>
               {errors.password && (
-                <p className="text-red-400 text-xs mt-2 animate-shake">{errors.password.message}</p>
+                <p className="text-red-400 text-xs mt-2 animate-shake">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
@@ -358,7 +390,9 @@ const Register = () => {
                 )}
               </button>
               {errors.confirmPassword && (
-                <p className="text-red-400 text-xs mt-2 animate-shake">{errors.confirmPassword.message}</p>
+                <p className="text-red-400 text-xs mt-2 animate-shake">
+                  {errors.confirmPassword.message}
+                </p>
               )}
             </div>
 
@@ -405,7 +439,10 @@ const Register = () => {
           <div className="mt-8 text-center relative z-10">
             <p className="text-emerald-200/70 text-sm">
               Already have an account?{" "}
-              <Link to="/login" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors duration-200 hover:underline">
+              <Link
+                to="/login"
+                className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors duration-200 hover:underline"
+              >
                 Sign In
               </Link>
             </p>
@@ -419,9 +456,17 @@ const Register = () => {
       {/* Keyframe and animation CSS */}
       <style jsx>{`
         @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25%, 75% { transform: translateX(-4px); }
-          50% { transform: translateX(4px); }
+          0%,
+          100% {
+            transform: translateX(0);
+          }
+          25%,
+          75% {
+            transform: translateX(-4px);
+          }
+          50% {
+            transform: translateX(4px);
+          }
         }
         .animate-shake {
           animation: shake 0.5s ease-in-out;

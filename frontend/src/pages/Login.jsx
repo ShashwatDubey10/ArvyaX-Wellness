@@ -1,6 +1,6 @@
 // src/pages/Login.jsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
@@ -11,6 +11,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
+
+  const emailRef = useRef(null);
 
   const {
     register: formRegister,
@@ -38,6 +40,8 @@ const Login = () => {
       });
       navigate("/dashboard");
     } catch (err) {
+      // Helpful debugging for failed login
+      console.error("Login error:", err.response?.data || err);
       toast.error(err.response?.data?.message || "Login failed", {
         style: {
           background: "#dc2626",
@@ -49,36 +53,27 @@ const Login = () => {
     }
   };
 
-  // Auto-focus email field on mount
+  // Auto-focus email field on mount (React best practice)
   useEffect(() => {
-    const emailInput = document.getElementById("email");
-    if (emailInput) emailInput.focus();
+    if (emailRef.current) emailRef.current.focus();
   }, []);
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-900 via-emerald-900 to-slate-800 flex items-center justify-center p-4 font-montserrat">
-      
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Floating Geometric Shapes */}
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-emerald-500/10 rounded-full animate-pulse"></div>
         <div className="absolute top-3/4 right-1/4 w-24 h-24 bg-emerald-400/5 rounded-full animate-bounce" style={{ animationDuration: '3s' }}></div>
         <div className="absolute top-1/2 left-1/6 w-16 h-16 bg-emerald-600/10 rounded-full animate-ping" style={{ animationDuration: '4s' }}></div>
-        
-        {/* Gradient Orbs */}
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-gradient-to-r from-emerald-400/20 to-transparent rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-gradient-to-l from-emerald-600/20 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
-
       {/* Main Login Container */}
       <div className="relative z-10 w-full max-w-md">
-        
         {/* Glassmorphism Card */}
         <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl shadow-2xl p-8 relative overflow-hidden">
-          
           {/* Card Glow Effect */}
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/5 to-emerald-600/5 rounded-3xl"></div>
-          
           {/* Header */}
           <div className="relative z-10 text-center mb-8">
             <Link 
@@ -90,16 +85,15 @@ const Login = () => {
             <h1 className="text-2xl font-bold text-white mb-2">Welcome Back</h1>
             <p className="text-emerald-200/80 text-sm">Continue your wellness journey</p>
           </div>
-
           {/* Login Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 relative z-10">
-            
             {/* Email Field */}
             <div className="relative">
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
+                ref={emailRef}
                 className={`w-full px-4 py-4 bg-white/10 border rounded-2xl text-white placeholder-transparent focus:outline-none transition-all duration-300 ${
                   errors.email 
                     ? "border-red-400 ring-2 ring-red-400/50" 
@@ -132,7 +126,6 @@ const Login = () => {
                 <p className="text-red-400 text-xs mt-2 animate-shake">{errors.email.message}</p>
               )}
             </div>
-
             {/* Password Field */}
             <div className="relative">
               <input
@@ -164,7 +157,6 @@ const Login = () => {
               >
                 Password
               </label>
-              
               {/* Password Toggle */}
               <button
                 type="button"
@@ -184,12 +176,10 @@ const Login = () => {
                   </svg>
                 )}
               </button>
-              
               {errors.password && (
                 <p className="text-red-400 text-xs mt-2 animate-shake">{errors.password.message}</p>
               )}
             </div>
-
             {/* Submit Button */}
             <button
               type="submit"
@@ -212,7 +202,6 @@ const Login = () => {
               )}
             </button>
           </form>
-
           {/* Footer */}
           <div className="mt-8 text-center relative z-10">
             <p className="text-emerald-200/70 text-sm">
@@ -226,11 +215,9 @@ const Login = () => {
             </p>
           </div>
         </div>
-
         {/* Subtle Bottom Glow */}
         <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 w-3/4 h-8 bg-emerald-500/20 rounded-full blur-xl"></div>
       </div>
-
       {/* Custom Styles for Animations */}
       <style jsx>{`
         @keyframes shake {
