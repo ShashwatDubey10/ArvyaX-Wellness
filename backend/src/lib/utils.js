@@ -1,3 +1,5 @@
+// src/lib/utils.js
+
 import jwt from "jsonwebtoken";
 
 export const generateToken = (userId, res) => {
@@ -5,13 +7,12 @@ export const generateToken = (userId, res) => {
     expiresIn: "7d",
   });
 
- res.cookie("jwt", token, {
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-  httpOnly: true,
-  sameSite: "none",  
-  secure: true       
-});
-
+  res.cookie("jwt", token, {
+    maxAge: 7 * 24 * 60 * 60 * 1000,  // 7 days
+    httpOnly: true,
+    sameSite: "none",  // allow cross-site
+    secure: true       // HTTPS only
+  });
 
   return token;
 };
